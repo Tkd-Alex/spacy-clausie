@@ -78,7 +78,7 @@ $ python setup.py test
 $ ipython
 In [1]: import spacy                                                                                                                                               
 In [2]: import claucy                                                                                                                                               
-In [3]: nlp = spacy.load("en")
+In [3]: nlp = spacy.load("en_core_web_sm")
 In [4]: claucy.add_to_pipe(nlp)                                                                                                                                     
 In [5]: doc = nlp("AE died in Princeton in 1955.")                                                                                                                 
 In [6]: doc._.clauses                                                                                                                                               

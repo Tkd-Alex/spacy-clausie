@@ -15,6 +15,7 @@ import typing
 
 from spacy.tokens import Span, Doc
 from spacy.matcher import Matcher
+from spacy.language import Language
 from lemminflect import getInflection
 
 logging.basicConfig(level=logging.INFO)
@@ -306,10 +307,10 @@ def _get_verb_matches(span):
 
     verb_matcher = Matcher(span.vocab)
     verb_matcher.add(
-        "Auxiliary verb phrase aux-verb", None, [{"POS": "AUX"}, {"POS": "VERB"}]
+        "Auxiliary verb phrase aux-verb", [[{"POS": "AUX"}, {"POS": "VERB"}]]
     )
-    verb_matcher.add("Auxiliary verb phrase", None, [{"POS": "AUX"}])
-    verb_matcher.add("Verb phrase", None, [{"POS": "VERB"}])
+    verb_matcher.add("Auxiliary verb phrase", [[{"POS": "AUX"}]])
+    verb_matcher.add("Verb phrase", [[{"POS": "VERB"}]])
 
     return verb_matcher(span)
 
@@ -404,6 +405,7 @@ def extract_clauses(span):
     return clauses
 
 
+@Language.component("extract_clauses_doc")
 def extract_clauses_doc(doc):
     for sent in doc.sents:
         clauses = extract_clauses(sent)
@@ -413,7 +415,7 @@ def extract_clauses_doc(doc):
 
 
 def add_to_pipe(nlp):
-    nlp.add_pipe(extract_clauses_doc)
+    nlp.add_pipe("extract_clauses_doc")
 
 
 def extract_span_from_entity(token):
@@ -485,7 +487,7 @@ def find_verb_subject(v):
 if __name__ == "__main__":
     import spacy
 
-    nlp = spacy.load("en")
+    nlp = spacy.load("en_core_web_sm")
     add_to_pipe(nlp)
 
     doc = nlp(

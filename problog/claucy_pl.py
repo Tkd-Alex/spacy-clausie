@@ -14,7 +14,7 @@ from problog.extern import problog_export_nondet
 import claucy as cl
 import spacy
 
-nlp = spacy.load("en")
+nlp = spacy.load("en_core_web_sm")
 cl.add_to_pipe(nlp)
 
 
